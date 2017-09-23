@@ -1,0 +1,19 @@
+{
+  "name": "node-red-node-sensortag2",
+  "version": "1.0.0",
+  "description": "Node-RED SensorTag2",
+  "main": "index.js",
+  "scripts": {
+    "test": "jshinit test.js"
+  },
+  "author": "Masayoshi Kuroda",
+  "license": "Apache",
+  "node-red": {
+    "nodes": {
+      "sensorTag": "index.js"
+    }
+  },
+  "dependencies": {
+    "sensortag": "^1.1.1"
+  }
+}

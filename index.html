@@ -1,0 +1,70 @@
+<script type="text/javascript">
+    RED.nodes.registerType('SensorTag2',{
+        category: 'IoT',
+        color: '#F3B567',
+        defaults: {
+            name:        {value: ""},
+            devname:     {value: false},
+            systemid:    {value: true},
+            serial:      {value: false},
+            firmrev:     {value: false},
+            hardrev:     {value: false},
+            softrev:     {value: false},
+            manufac:     {value: false},
+            battery:     {value: false},
+            temperature: {value: true},
+            humidity:    {value: true},
+            pressure:    {value: true},
+            luxometer:   {value: false},
+            topic:       {value: true}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "bluetooth.png",
+        label: function() {
+            return this.name||"SensorTag2";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="SensorTag2">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-external-link"></i> Device Info</label>
+        <input type="checkbox" id="node-input-systemid" style="display:inline-block; width:auto; vertical-align:top;"> System ID<br/>
+        <label>&nbsp;</label>
+        <input type="checkbox" id="node-input-serial" style="display:inline-block; width:auto; vertical-align:top;"> Serial Number<br/>
+        <label>&nbsp;</label>
+        <input type="checkbox" id="node-input-firmrev" style="display:inline-block; width:auto; vertical-align:top;"> Firmware Revision<br/>
+        <label>&nbsp;</label>
+        <input type="checkbox" id="node-input-hardrev" style="display:inline-block; width:auto; vertical-align:top;"> Hardware Revision<br/>
+        <label>&nbsp;</label>
+        <input type="checkbox" id="node-input-softrev" style="display:inline-block; width:auto; vertical-align:top;"> Software Revision<br/>
+        <label>&nbsp;</label>
+        <input type="checkbox" id="node-input-battery" style="display:inline-block; width:auto; vertical-align:top;"> Battery<br/>
+        <label>&nbsp;</label>
+        <input type="checkbox" id="node-input-manufac" style="display:inline-block; width:auto; vertical-align:top;"> Manufacture Name<br/>
+    </div>
+    <div class="form-row">
+         <label for="node-input-name"><i class="fa fa-external-link"></i> Sensors</label>
+         <input type="checkbox" id="node-input-humidity" style="display:inline-block; width:auto; vertical-align:top;"> Temperature and Humidity<br/>
+         <label>&nbsp;</label>
+         <input type="checkbox" id="node-input-temperature" style="display:inline-block; width:auto; vertical-align:top;"> IR Temperature<br/>
+         <label>&nbsp;</label>
+         <input type="checkbox" id="node-input-pressure" style="display:inline-block; width:auto; vertical-align:top;"> Pressure<br/>
+         <label>&nbsp;</label>
+         <input type="checkbox" id="node-input-luxometer" style="display:inline-block; width:auto; vertical-align:top;"> Luminosity (CC2650 only)<br/>
+    </div>
+    <div class="form-row">
+         <label for="node-input-name"><i class="fa fa-external-link"></i> Option</label>
+         <input type="checkbox" id="node-input-topic" style="display:inline-block; width:auto; vertical-align:top;"> Set topic as System ID<br/>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="SensorTag2">
+    <p>A simple SensorTag2</p>
+    <p>require node version 4.0 or later</p>
+</script>

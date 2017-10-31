@@ -419,7 +419,7 @@ module.exports = function(RED) {
     var node = this;
     node.on('input', function(msg) {
       if (!isStatusReady()) {
-        debug('not connected or busy. skipped.');
+        node.debug('not connected or busy. skipped.');
         return;
       }
 
@@ -431,7 +431,7 @@ module.exports = function(RED) {
         node.send(msg);
       })
       .catch(function(error) {
-         error('catch: ' + error);
+         node.error('catch: ' + error);
       });
     });
     node.on('close', function(removed, done) {

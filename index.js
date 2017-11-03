@@ -312,7 +312,7 @@ function getDeviceInformation(config) {
     }
   }).then(function(tag) {
     return new Promise(function(resolve, reject) {
-      setTimeout(resolve(tag), 1000);
+      setTimeout(resolve(tag), 2000);
     })
   }).then(function(tag) {
     if (config.temperature) {

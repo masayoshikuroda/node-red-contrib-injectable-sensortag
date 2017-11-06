@@ -1,9 +1,10 @@
 <script type="text/javascript">
-    RED.nodes.registerType('SensorTag2',{
+    RED.nodes.registerType('InjectableSensorTag',{
         category: 'IoT',
         color: '#F3B567',
         defaults: {
-            name:        {value: ""},
+            name:        {value: "SensorTag"},
+            delay:       |value: 1000), 
             devname:     {value: false},
             systemid:    {value: true},
             serial:      {value: false},
@@ -22,15 +23,17 @@
         outputs:1,
         icon: "bluetooth.png",
         label: function() {
-            return this.name||"SensorTag2";
+            return this.name||"SensorTag";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="SensorTag2">
+<script type="text/x-red" data-template-name="InjectableSensorTag">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <input type="text" id="node-input-name" placeholder="Name"><br/>
+        <label for="node-input-delay"><i class="icon-tag"></i> Delay</label>
+        <input type="text" id="node-input-delay" placeholder="Delay"><br/>        
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-external-link"></i> Device Info</label>
@@ -64,7 +67,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="SensorTag2">
-    <p>A simple SensorTag2</p>
+<script type="text/x-red" data-help-name="InjectableSensorTag">
+    <p>A injectable SensorTag</p>
     <p>require node version 4.0 or later</p>
 </script>

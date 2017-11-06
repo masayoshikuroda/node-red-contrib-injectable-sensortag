@@ -6,11 +6,15 @@
   "scripts": {
     "test": "jshinit test.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kurodamasayoshi/node-red-node-injectable-sensortag.git"
+  },
   "keywords": [
     "node-red",
     "sensortag"
   ],
-  "author": "Masayoshi Kuroda",
+  "author": "Masayoshi Kuroda<kuroda.masayoshi@gmail.com>",
   "license": "Apache",
   "node-red": {
     "nodes": {

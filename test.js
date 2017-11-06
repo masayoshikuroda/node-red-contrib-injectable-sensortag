@@ -1,7 +1,7 @@
 var SensorTagPromise = require('./sensortagpromise');
 
 console.log('start disconver')
-SensorTagPromise.discoverPromise()
+SensorTagPromise.discover()
 .then(function(tag) {
   console.log('stop discover');
 
@@ -16,42 +16,42 @@ SensorTagPromise.discoverPromise()
   Promise.resolve()
   .then(() => {
     console.log('start connectAndSetup');
-    return SensorTagPromise.connectAndSetupPromise(tag)
+    return SensorTagPromise.connectAndSetup(tag)
     .then(() => console.log('stop connectAndSetup'));
   }).then(() => {
-    return SensorTagPromise.getSystemIdPromise(tag)
+    return SensorTagPromise.getSystemId(tag)
     .then((id) => console.log('SystemID: ' + id));
   }).then(() => {
-    return SensorTagPromise.getDeviceNamePromise(tag)
+    return SensorTagPromise.getDeviceName(tag)
     .then((name) => console.log('DeviceName:' + name));
   }).then(() => {
-    return SensorTagPromise.getSerialNumberPromise(tag)
+    return SensorTagPromise.getSerialNumber(tag)
     .then((serial) => console.log('SerialNumber: ' + serial));
   }).then(() => {
-    return SensorTagPromise.getFirmwareRevisionPromise(tag)
+    return SensorTagPromise.getFirmwareRevision(tag)
     .then((rev) => console.log('FirmwareRevision: ' + rev));
   }).then(() => {
-    return SensorTagPromise.getHardwareRevisionPromise(tag)
+    return SensorTagPromise.getHardwareRevision(tag)
     .then((rev) => console.log('HardwareRevison: ' + rev));
-//  }).then(() => {
-//    return SensorTagPromise.getSoftwareRevisonPromise(tag)
-//    .then((rev) => console.log('SoftwareRevision: ' + rev));
   }).then(() => {
-    return SensorTagPromise.getBatteryLevelPromise(tag)
+    return SensorTagPromise.getSoftwareRevison(tag)
+    .then((rev) => console.log('SoftwareRevision: ' + rev));
+  }).then(() => {
+    return SensorTagPromise.getBatteryLevel(tag)
     .then((level) => console.log('BatteryLevel: ' + level));
   }).then(() => {
-    return SensorTagPromise.getManufactureNamePromise(tag)
+    return SensorTagPromise.getManufactureName(tag)
     .then((name) => console.log('ManufactureName: ' + name));
   }).then(() => {
     console.log('start setTimeout');
-    return SensorTagPromise.setTimeoutPromise(6000)
+    return SensorTagPromise.setTimeout(6000)
     .then(() => console.log('stop setTimeout'));
   }).then(() => {
     tag.notifySimpleKey();
     console.log('start simpleKeyChange');
-    return SensorTagPromise.onSimpleKeyChangePromise(tag)
-    return SensorTagPromise.onSimpleKeyChangePromise(tag)
-    .then((left, right, reedRelay) => {
+    return SensorTagPromise.onSimpleKeyChange(tag)
+    return SensorTagPromise.onSimpleKeyChange(tag)
+    .then((keys) => {
       console.log('stop simpleKeyChange');
       console.log('start disconnect');
       return SensorTagPromise.disconnectPromise(tag)

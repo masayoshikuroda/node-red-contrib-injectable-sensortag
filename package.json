@@ -6,6 +6,10 @@
   "scripts": {
     "test": "jshinit test.js"
   },
+  "keywords": [
+    "node-red",
+    "sensortag"
+  ],
   "author": "Masayoshi Kuroda",
   "license": "Apache",
   "node-red": {

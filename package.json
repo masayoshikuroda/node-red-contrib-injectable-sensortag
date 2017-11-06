@@ -1,7 +1,7 @@
 {
-  "name": "node-red-node-sensortag2",
+  "name": "node-red-node-injectable-sensortag",
   "version": "1.0.0",
-  "description": "Node-RED SensorTag2",
+  "description": "Node-RED Injectable SensorTag",
   "main": "index.js",
   "scripts": {
     "test": "jshinit test.js"
@@ -14,6 +14,6 @@
     }
   },
   "dependencies": {
-    "sensortag": "^1.1.1"
+    "sensortag": "^1.3.0"
   }
 }

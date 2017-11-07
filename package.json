@@ -1,5 +1,5 @@
 {
-  "name": "node-red-node-injectable-sensortag",
+  "name": "node-red-contrib-injectable-sensortag",
   "version": "1.0.0",
   "description": "Node-RED Injectable SensorTag",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kurodamasayoshi/node-red-node-injectable-sensortag.git"
+    "url": "git+https://github.com/kurodamasayoshi/node-red-contrib-injectable-sensortag.git"
   },
   "keywords": [
     "node-red",

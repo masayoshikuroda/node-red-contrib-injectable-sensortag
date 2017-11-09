@@ -19,42 +19,58 @@ SensorTagPromise.discover()
     return SensorTagPromise.connectAndSetup(tag)
     .then(() => console.log('stop connectAndSetup'));
   }).then(() => {
-    return SensorTagPromise.getSystemId(tag)
+    return SensorTagPromise.readSystemId(tag)
     .then((id) => console.log('SystemID: ' + id));
   }).then(() => {
-    return SensorTagPromise.getDeviceName(tag)
+    return SensorTagPromise.readDeviceName(tag)
     .then((name) => console.log('DeviceName:' + name));
   }).then(() => {
-    return SensorTagPromise.getSerialNumber(tag)
+    return SensorTagPromise.readSerialNumber(tag)
     .then((serial) => console.log('SerialNumber: ' + serial));
   }).then(() => {
-    return SensorTagPromise.getFirmwareRevision(tag)
+    return SensorTagPromise.readFirmwareRevision(tag)
     .then((rev) => console.log('FirmwareRevision: ' + rev));
   }).then(() => {
-    return SensorTagPromise.getHardwareRevision(tag)
+    return SensorTagPromise.readHardwareRevision(tag)
     .then((rev) => console.log('HardwareRevison: ' + rev));
   }).then(() => {
-    return SensorTagPromise.getSoftwareRevison(tag)
+    return SensorTagPromise.readSoftwareRevision(tag)
     .then((rev) => console.log('SoftwareRevision: ' + rev));
   }).then(() => {
-    return SensorTagPromise.getBatteryLevel(tag)
+    return SensorTagPromise.readBatteryLevel(tag)
     .then((level) => console.log('BatteryLevel: ' + level));
   }).then(() => {
-    return SensorTagPromise.getManufactureName(tag)
+    return SensorTagPromise.readManufactureName(tag)
     .then((name) => console.log('ManufactureName: ' + name));
-  }).then(() => {
+  })
+  .then(() => SensorTagPromise.enableIrTemperature(tag))
+  .then(() => SensorTagPromise.enableHumidity(tag))
+  .then(() => SensorTagPromise.enableBarometricPressure(tag))
+  .then(() => SensorTagPromise.enableLuxometer(tag))
+  .then(() => {
     console.log('start setTimeout');
-    return SensorTagPromise.setTimeout(6000)
+    return SensorTagPromise.setTimeout(1000)
     .then(() => console.log('stop setTimeout'));
-  }).then(() => {
+  })
+  .then(() => SensorTagPromise.readIrTemperature(tag))
+  .then((temp) => console.log('IrTemp: ' + temp.object + "," + temp.ambient)) 
+  .then(() => SensorTagPromise.disableIrTemperature(tag))
+  .then(() => SensorTagPromise.readHumidity(tag))
+  .then((humid) => console.log('Humid: ' + humid.temperature + ', ' + humid.humidity))
+  .then(() => SensorTagPromise.disableHumidity(tag))
+  .then(() => SensorTagPromise.readBarometricPressure(tag))
+  .then((press) => console.log('Pressure: ' + press))
+  .then(() => SensorTagPromise.disableBarometricPressure(tag))
+  .then(() => SensorTagPromise.readLuxometer(tag))
+  .then((lux) => console.log('Luxometer: ' + lux))
+  .then(() => {
     tag.notifySimpleKey();
     console.log('start simpleKeyChange');
-    return SensorTagPromise.onSimpleKeyChange(tag)
     return SensorTagPromise.onSimpleKeyChange(tag)
     .then((keys) => {
       console.log('stop simpleKeyChange');
       console.log('start disconnect');
-      return SensorTagPromise.disconnectPromise(tag)
+      return SensorTagPromise.disconnect(tag)
       .then(() => console.log('stop disconnect'));
     });
   });

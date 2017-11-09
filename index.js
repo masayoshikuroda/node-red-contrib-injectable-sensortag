@@ -411,7 +411,7 @@ function getDeviceInformation(config) {
 
 module.exports = function(RED) {
   "use strict";
-  function SensorTag2Node(config) {
+  function InjectableSensorTagNode(config) {
     console.log('enter: SensorTag2Node');
     RED.nodes.createNode(this, config);
     console.log('    id: ' + this.id);
@@ -442,5 +442,5 @@ module.exports = function(RED) {
     });
   }
 
-  RED.nodes.registerType("SensorTag2", SensorTag2Node);
+  RED.nodes.registerType("InjectableSensorTag", InjectableSensorTagNode);
 }

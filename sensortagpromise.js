@@ -110,7 +110,7 @@ exports.readSoftwareRevision = function(tag) {
   return new Promise(function(resolve, reject) {
     tag.readSoftwareRevision(function(error, revision) {
       if (error) throw error;
-      console.log('leave readSotwareRevision()=' + revision);
+      console.log('leave readSoftwareRevision()=' + revision);
       resolve(revision);
     });
   });

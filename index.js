@@ -149,7 +149,7 @@ function getDeviceInformation(config) {
     }
   }).then(function() {
     if (config.manufac) {
-      return SensortagPromise.readManufacturerName(ctx.tag)
+      return SensorTagPromise.readManufacturerName(ctx.tag)
       .then(function(name) { data.ManufacturerName = name; });
     }
   }).then(function() {

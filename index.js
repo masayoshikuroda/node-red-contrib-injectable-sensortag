@@ -69,7 +69,7 @@ function isStatusReady() {
 function startDiscovery() {
   console.log('enter: startDiscovery');
   setState(1);
-  SensorTag.discover()
+  SensorTagPromise.discover()
   .then(function(tag) {
     console.log('enter: onDiscover');
     setState(2);

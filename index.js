@@ -124,27 +124,27 @@ function getDeviceInformation(config) {
     }
   }).then(function() {
     if (config.systemid) {
-      return SensortagPromise.readSystemId(ctx.tag)
+      return SensorTagPromise.readSystemId(ctx.tag)
       .then(function(id) { data.SystemId = id; });
     }
   }).then(function() {
     if (config.serial) {
-      return SensortagPromise.readSerialNumber(ctx.tag)
+      return SensorTagPromise.readSerialNumber(ctx.tag)
       .then(function(number) { data.SerialNumber = number; });
     }
   }).then(function() {
     if (config.firmrev) {
-      return SensortagPromise.readFirmwareRevision(ctx.tag)
+      return SensorTagPromise.readFirmwareRevision(ctx.tag)
       .then(function(revision) { data.FirmwareRevison = revision; });
     }
   }).then(function() {
     if(config.hardrev) {
-      return SensortagPromise.readHardwareRevision(ctx.tag)
+      return SensorTagPromise.readHardwareRevision(ctx.tag)
       .then(function(revision) { data.HardwareRevison = revision; });
     }
   }).then(function() {
     if (config.softrev) {
-      return SensortagPromise.readSoftwareRevision(ctx.tag)
+      return SensorTagPromise.readSoftwareRevision(ctx.tag)
       .then(function(revision) { data.SoftwareRevison = revision; });
     }
   }).then(function() {
@@ -154,12 +154,12 @@ function getDeviceInformation(config) {
     }
   }).then(function() {
     if (config.battery) {
-      return SensortagPromise.readBatteryLevel(ctx.tag)
+      return SensorTagPromise.readBatteryLevel(ctx.tag)
       .then(function(level) { data.BatteryLevel = level; });
     }
   }).then(function() {
     if (config.temperature) {
-      return SensortagPromise.enableIrTemperature(ctx.tag);
+      return SensorTagPromise.enableIrTemperature(ctx.tag);
     }
   }).then(function() {
     if (config.humidity) {

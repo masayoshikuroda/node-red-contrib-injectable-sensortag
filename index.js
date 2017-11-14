@@ -68,33 +68,16 @@ function isStatusReady() {
 
 function startDiscovery() {
   console.log('enter: startDiscovery');
-  SensorTag.discover(onDiscover);
   setState(1);
-
-}
-
-function onDiscover(tag) {
-  console.log('enter: onDiscover');
-  setState(2);
-
-  Promise.resolve()
-  .then(function() {
-    return new Promise(function(resolve, reject) {
-      tag.connectAndSetup(function(error) {
-        if (error) throw error;
-        resolve();
-      });
-    });
+  SensorTag.discover()
+  .then(function(tag) {
+    console.log('enter: onDiscover');
+    setState(2);
+    return SensorTagPromise.connectAndSetup(tag);
   }).then(function() {
-    return new Promise(function(resolve, reject) {
-      tag.notifySimpleKey(function(error) {
-        if (error) throw error;
-        resolve();
-      });
-    });
+    return SensorTagPromise.notifySimpleKey(tag);
   }).then(function() {
     tag.on('simpleKeyChange', onSimpleKeyChange);
-  }).then(function() {
     ctx.tag = tag;
     setState(3);
   }).catch(function(error) {

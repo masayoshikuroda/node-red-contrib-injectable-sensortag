@@ -1,4 +1,4 @@
-var SensorTag = require('sensortag');
+var SensorTagPromise = require('./sensortagpromise');
 var ctx = { state: 0, nodes: {}, data: {} };
 
 function addNode(node) {
@@ -128,281 +128,111 @@ function onDisconnect() {
   ctx.tag = null;
 }
 
-function getDeviceNamePromise(tag) {
-  return new Promise(function(resolve, reject) {
-    tag.readDeviceName(function(error, name) {
-      if (error) throw error;
-      resolve(name);
-    });
-  });
-}
-
-function getSystemIdPromise(tag) {
-  return new Promise(function(resolve, reject) {
-    tag.readSystemId(function(error, id) {
-      if (error) throw error;
-      resolve(id);
-    });
-  });
-}
-
-function getSerialNumberPromise(tag) {
-  return new Promise(function(resolve, reject) {
-    tag.readSerialNumber(function(error, number) {
-      if (error) throw error;
-      resolve(number);
-    });
-  });
-}
-
-function getFirmwareRevisionPromise(tag) {
-  return new Promise(function(resolve, reject) {
-    tag.readFirmwareRevision(function(error, revision) {
-      if (error) throw error;
-      resolve(revision);
-    });
-  });
-}
-
-function getHardwareRevisionPromise(tag) {
-  return new Promise(function(resolve, reject){
-    tag.readHardwareRevision(function(error, revision) {
-      if (error) throw error;
-      resolve(revision);
-    });
-  });
-}
-
-function getSoftwareRevisionPromise(tag) {
-  return new Promise(function(resolve, reject) {
-    tag.readSoftwareRevision(function(error, revision) {
-      if (error) throw error;
-      resolve(revision);
-    });
-  });
-}
-
-function getBatteryLevelPromise(tag) {
-  return new Promise(function(resolve, reject) {
-    tag.readBatteryLevel(function(error, level) {
-      if (error) throw error;
-      resolve(level);
-    });
-  });
-}
-
-function getManufacturerNamePromise(tag) {
-  return new Promise(function(resolve, reject) {
-    tag.readManufacturerName(function(error, name){
-      if (error) throw error;
-      resolve(name);
-    });
-  });
-}
-
 function getDeviceInformation(config) {
   var data = { };
+  setState(4);
+
+
   return Promise.resolve(ctx.tag)
-  .then(function(tag) {
-    setState(4);
-    return tag;
-  }).then(function(tag) {
+  .then(function() {
     if (config.devname) {
-      return getDeviceNamePromise(tag).then(function(name) {
-        data.DeviceName = name;
-        return tag;
-      });
-    } else {
-      return tag;
+      return SensortagPromise.readDeviceName(ctx.tag)
+      .then(function(name) { data.DeviceName = name; });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.systemid) {
-      return getSystemIdPromise(tag).then(function(id) {
-        data.SystemId = id;
-        return tag;
-      });
-    } else {
-      return tag;
+      return SensortagPromise.readSystemId(ctx.tag)
+      .then(function(id) { data.SystemId = id; });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.serial) {
-      return getSerialNumberPromise(tag).then(function(number) {
-        data.SerialNumber = number;
-        return tag;
-      });
-    } else {
-      return tag;
+      return SensortagPromise.readSerialNumber(ctx.tag)
+      .then(function(number) { data.SerialNumber = number; });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.firmrev) {
-      return getFirmwareRevisionPromise(tag).then(function(revision) {
-        data.FirmwareRevison = revision;
-        return tag;
-      });
-    } else {
-      return tag;
+      return SensortagPromise.readFirmwareRevision(ctx.tag)
+      .then(function(revision) { data.FirmwareRevison = revision; });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if(config.hardrev) {
-      return getHardwareRevisionPromise(tag).then(function(revision) {
-        data.HardwareRevison = revision;
-        return tag;
-      });
-    } else {
-      return tag;
+      return SensortagPromise.readHardwareRevision(ctx.tag)
+      .then(function(revision) { data.HardwareRevison = revision; });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.softrev) {
-      return getSoftwareRevisionPromise(tag).then(function(revision) {
-        data.SoftwareRevison = revision;
-        return tag;
-      });
-    } else {
-      return tag;
+      return SensortagPromise.readSoftwareRevision(ctx.tag)
+      .then(function(revision) { data.SoftwareRevison = revision; });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.manufac) {
-      return getManufacturerNamePromise(tag).then(function(name){
-        data.ManufacturerName = name;
-        return tag;
-      });
-    } else {
-      return tag;
+      return SensortagPromise.readManufacturerName(ctx.tag)
+      .then(function(name) { data.ManufacturerName = name; });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.battery) {
-      return getBatteryLevelPromise(tag).then(function(level) {
-        data.BatteryLevel = level;
-        return tag;
-      });
-    } else {
-      return tag;
+      return SensortagPromise.readBatteryLevel(ctx.tag)
+      .then(function(level) { data.BatteryLevel = level; });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.temperature) {
-      return new Promise(function(resolve, reject) {
-        tag.enableIrTemperature(resolve(tag));
-      });
-    } else {
-      return tag;
+      return SensortagPromise.enableIrTemperature(ctx.tag);
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.humidity) {
-      return new Promise(function(resolve, reject) {
-        tag.enableHumidity(resolve(tag));
-      });
-    } else {
-      return tag;
+      return SensorTagPromise.enableHumidity(ctx.tag);
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.pressure) {
-      return new Promise(function(resolve, reject) {
-        tag.enableBarometricPressure(resolve(tag));
-      });
-    } else {
-      return tag;
+      return SensorTagPromise.enableBarometricPressure(ctx.tag);
     }
   }).then(function(tag) {
     if (config.luxometer) {
-      return new Promise(function(resolve, reject) {
-        tag.enableLuxometer(resolve(tag));
-      });
-    } else {
-      return tag;
+      return SensorTagPromise.enableLuxometer(ctx.tag);
     }
   }).then(function(tag) {
-    return new Promise(function(resolve, reject) {
-      setTimeout(resolve(tag), 2000);
-    })
-  }).then(function(tag) {
+    return SensorTagPromise.setTimeout(2000);
+  }).then(function() {
     if (config.temperature) {
-      return new Promise(function(resolve, reject) {
-        tag.readIrTemperature(function(error, objectTemperature, ambientTemperature) {
-          if (error) throw error;
-          data.ObjectTemperature = objectTemperature;
-          data.AmbientTemperature = ambientTemperature;
-          resolve(tag);
-        });
+      return SensorTagPromise.readIrTemperature(ctx.tag)
+      .then(function(temp) {
+          data.ObjectTemperature = temp.object;
+          data.AmbientTemperature = temp.ambient;
+      }).then(function() {
+        return SensorTagPromise.disableIrTemperature(ctx.tag);
       });
-    } else {
-      return tag;
-    }
-  }).then(function(tag) {
-    if (config.temperature) {
-      return new Promise(function(resolve, reject) {
-        tag.disableIrTemperature(resolve(tag));
-      });
-    } else {
-      return tag;
     }
   }).then(function(tag) {
     if (config.humidity) {
-      return new Promise(function(resolve, reject) {
-        tag.readHumidity(function(error, temperature, humidity) {
-          if (error) throw error;
-          data.Temperature = temperature;
-          data.Humidity = humidity;
-          resolve(tag);
-        });
+      return SensorTagPromise.readHumidity(ctx.tag)
+      .then(function(humid) {
+          data.Temperature = humid.temperature;
+          data.Humidity = humid.humidity;
+      }).then(function() {
+        return SensorTagPromise.disableHumidity(ctx.tag);
       });
-    } else {
-      return tag;
-    }
-  }).then(function(tag) {
-    if (config.humidity) {
-      return new Promise(function(resolve, reject) {
-        tag.disableHumidity(resolve(tag));
-      });
-    } else {
-      return tag;
     }
   }).then(function(tag) {
     if (config.pressure) {
-      return new Promise(function(resolve, reject) {
-        tag.readBarometricPressure(function(error, pressure) {
-          if (error) throw error;
+      return SensorTagPromise.readBarometricPressure(ctx.tag)
+      .then(function(pressure) {
           data.BarometricPressure = pressure;
-          resolve(tag);
-        });
+      }).then(function() {
+        return SensorTagPromise.disableBarometricPressure(ctx.tag);
       });
-    } else {
-      return tag;
-    }
-  }).then(function(tag) {
-    if (config.pressure) {
-      return new Promise(function(resolve, reject) {
-        tag.disableBarometricPressure(resolve(tag));
-      });
-    } else {
-      return tag;
     }
   }).then(function(tag) {
     if (config.luxometer) {
-      return new Promise(function(resolve, reject) {
-        tag.readLuxometer(function(error, lux) {
-          if (error) throw error;
+      return SensorTagPromise.readLuxometer(ctx.tag)
+      .then(function(lux) {
           data.Lux = lux;
-          resolve(tag);
-        });
+      }).then(function() {
+        return SensorTagPromise.disableLuxometer(ctx.tag);
       });
-    } else {
-      return tag;
     }
-  }).then(function(tag) {
-    if (config.luxometer) {
-      return new Promise(function(resolve, reject) {
-        tag.disableLuxometer(resolve(tag));
-      });
-    } else {
-      return tag;
-    }
-  }).then(function(tag) {
-    return new Promise(function(resolve, reject) {
+  }).then(function() {
       setState(3);
-      resolve(tag);
-    });
-  }).then(function(tag) {
-    return data;
+      return data;
   }).catch(function(error) {
     console.log(error);
     setState(3);

@@ -174,7 +174,7 @@ function getDeviceInformation(config) {
       return SensorTagPromise.enableLuxometer(ctx.tag);
     }
   }).then(function(tag) {
-    return SensorTagPromise.setTimeout(2000);
+    return SensorTagPromise.setTimeout(config.delay);
   }).then(function() {
     if (config.temperature) {
       return SensorTagPromise.readIrTemperature(ctx.tag)

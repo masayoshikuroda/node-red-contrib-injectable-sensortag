@@ -72,13 +72,13 @@ function startDiscovery() {
   SensorTagPromise.discover()
   .then(function(tag) {
     console.log('enter: onDiscover');
-    setState(2);
-    return SensorTagPromise.connectAndSetup(tag);
-  }).then(function() {
-    return SensorTagPromise.notifySimpleKey(tag);
-  }).then(function() {
-    tag.on('simpleKeyChange', onSimpleKeyChange);
     ctx.tag = tag;
+    setState(2);
+    return SensorTagPromise.connectAndSetup(ctx.tag);
+  }).then(function() {
+    return SensorTagPromise.notifySimpleKey(ctx.tag);
+  }).then(function() {
+    ctx.tag.on('simpleKeyChange', onSimpleKeyChange);
     setState(3);
   }).catch(function(error) {
     console.log(error);

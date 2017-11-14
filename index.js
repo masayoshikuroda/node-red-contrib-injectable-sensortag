@@ -149,8 +149,8 @@ function getDeviceInformation(config) {
     }
   }).then(function() {
     if (config.manufac) {
-      return SensorTagPromise.readManufacturerName(ctx.tag)
-      .then(function(name) { data.ManufacturerName = name; });
+      return SensorTagPromise.readManufactureName(ctx.tag)
+      .then(function(name) { data.ManufactureName = name; });
     }
   }).then(function() {
     if (config.battery) {

@@ -69,28 +69,30 @@ function isStatusReady() {
 function startDiscovery() {
   console.log('enter: startDiscovery');
   setState(1);
-  SensorTagPromise.discover()
+  SensorTagPromise.discoverPromise()
   .then(function(tag) {
-    console.log('enter: onDiscover');
+    console.log('discovered');
     ctx.tag = tag;
     setState(2);
     tag.disconnect(onDisconnect);
-    return SensorTagPromise.connectAndSetup(ctx.tag);
+    return tag.connectAndSetupPromise();
   }).then(function() {
     return SensorTagPromise.notifySimpleKey(ctx.tag);
   }).then(function() {
-    ctx.tag.on('simpleKeyChange', onSimpleKeyChange);
+    ctx.tag.on('simpleKeyChange', simpleKeyChanged);
     setState(3);
   }).catch(function(error) {
     console.log(error);
   });
 }
 
-function onSimpleKeyChange(left, right, reedRelay) {
-  console.log('enter: onSimpleKeyChage');
+function simpleKeyChanged(left, right, reedRelay) {
+  console.log('simpleKeyChanged');
 
   if(left) {
-    stopConnection();
+   ctx.tag.disconnect(function() {
+      console.log('stopped manually');
+    } 
   }
 
   if(right && isStatusReady()) {
@@ -98,22 +100,15 @@ function onSimpleKeyChange(left, right, reedRelay) {
   }
 }
 
-function stopConnection() {
-  console.log('enter: stopConnection');
-  setState(5);
-  ctx.tag.disconnect(function() {
-    console.log('stopped manually')
-  });
-}
-
-function onDisconnect() {
-  console.log('enter: onDisconnect');
+function disconnected() {
+  console.log('disconnectd');
   setState(0);
   ctx.tag = null;
   startDiscovery();
 }
 
 function getDeviceInformation(config) {
+  console.log('getDeviceInformation')
   var data = { };
   setState(4);
 

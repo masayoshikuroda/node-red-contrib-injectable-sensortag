@@ -10,16 +10,28 @@ exports.setTimeout = function(delay) {
   });
 }
 
-exports.discover = function() {
-  console.log('enter discover()');
+
+exports.discoverPromise = function() {
+  console.log('enter discoverPromise()');
   return new Promise(function(resolve, reject) {
     SensorTag.discover(function(tag) {
-      console.log('leave discover(tag)');
+      addPromiseFunctions(tag);
+      console.log('leave discoverPromise(tag)');
       resolve(tag);
     });
   });
 }
- 
+
+function addPromiseFuncitons(tag) {
+  tag.connectAndSetupPromise = function(tag) {
+    console.log('enter connectAndSetupPromise()');
+    return new Promise(function(resolve, reject) {
+      console.log('leave connectAndSetupPromise()');
+      resolve();
+    });
+  }
+}
+
 exports.connectAndSetup = function(tag) {
   console.log('enter connectAndSetup()');
   return new Promise(function(resolve, reject) {

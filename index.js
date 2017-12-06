@@ -74,6 +74,7 @@ function startDiscovery() {
     console.log('enter: onDiscover');
     ctx.tag = tag;
     setState(2);
+    tag.disconnect(onDisconnect);
     return SensorTagPromise.connectAndSetup(ctx.tag);
   }).then(function() {
     return SensorTagPromise.notifySimpleKey(ctx.tag);

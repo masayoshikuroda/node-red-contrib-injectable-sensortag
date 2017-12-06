@@ -166,11 +166,11 @@ function getDeviceInformation(config) {
     if (config.pressure) {
       return tag.enableBarometricPressurePromise();
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.luxometer) {
       return tag.enableLuxometerPromise();
     }
-  }).then(function(tag) {
+  }).then(function() {
     return SensorTag.setTimeoutPromise(config.delay);
   }).then(function() {
     if (config.temperature) {
@@ -182,7 +182,7 @@ function getDeviceInformation(config) {
         return tag.disableIrTemperaturePromise();
       });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.humidity) {
       return tag.readHumidityPromise()
       .then(function(humid) {
@@ -192,7 +192,7 @@ function getDeviceInformation(config) {
         return tag.disableHumidityPromise();
       });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.pressure) {
       return tag.readBarometricPressurePromise()
       .then(function(pressure) {
@@ -201,7 +201,7 @@ function getDeviceInformation(config) {
         return tag.disableBarometricPressurePromise();
       });
     }
-  }).then(function(tag) {
+  }).then(function() {
     if (config.luxometer) {
       return tag.readLuxometerPromise()
       .then(function(lux) {

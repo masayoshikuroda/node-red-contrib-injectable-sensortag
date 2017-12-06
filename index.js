@@ -94,9 +94,7 @@ function onSimpleKeyChange(left, right, reedRelay) {
   }
 
   if(right && isStatusReady()) {
-    getDeviceInformation().then(function(data) {
-      console.log(data);
-    });
+    console.log('right button pushed!');
   }
 }
 
@@ -112,7 +110,7 @@ function onDisconnect() {
   console.log('enter: onDisconnect');
   setState(0);
   ctx.tag = null;
-  startDiscoverry();
+  startDiscovery();
 }
 
 function getDeviceInformation(config) {

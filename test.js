@@ -1,14 +1,14 @@
-var SensorTagPromise = require('./sensortagpromise');
+var SensorTag = require('./sensortagpromise');
+
+address = process.argv[2]
 
 console.log('start disconver')
-SensorTagPromise.discover()
+SensorTag.discoverByAddressPromise(address)
 .then(function(tag) {
   console.log('stop discover');
 
-  console.log('start ondDisconnect');
-  SensorTagPromise.onDisconnect(tag)
-  .then(() => {
-    console.log('stop onDisconnect');
+  tag.on('disconnect', function() {
+    console.log('disconnected');
     process.exit(0);
   });
 
@@ -16,62 +16,61 @@ SensorTagPromise.discover()
   Promise.resolve()
   .then(() => {
     console.log('start connectAndSetup');
-    return SensorTagPromise.connectAndSetup(tag)
+    return tag.connectAndSetupPromise()
     .then(() => console.log('stop connectAndSetup'));
   }).then(() => {
-    return SensorTagPromise.readSystemId(tag)
+    return tag.readSystemIdPromise()
     .then((id) => console.log('SystemID: ' + id));
   }).then(() => {
-    return SensorTagPromise.readDeviceName(tag)
+    return tag.readDeviceNamePromise()
     .then((name) => console.log('DeviceName:' + name));
   }).then(() => {
-    return SensorTagPromise.readSerialNumber(tag)
+    return tag.readSerialNumberPromise()
     .then((serial) => console.log('SerialNumber: ' + serial));
   }).then(() => {
-    return SensorTagPromise.readFirmwareRevision(tag)
+    return tag.readFirmwareRevisionPromise()
     .then((rev) => console.log('FirmwareRevision: ' + rev));
   }).then(() => {
-    return SensorTagPromise.readHardwareRevision(tag)
+    return tag.readHardwareRevisionPromise()
     .then((rev) => console.log('HardwareRevison: ' + rev));
   }).then(() => {
-    return SensorTagPromise.readSoftwareRevision(tag)
+    return tag.readSoftwareRevisionPromise()
     .then((rev) => console.log('SoftwareRevision: ' + rev));
   }).then(() => {
-    return SensorTagPromise.readBatteryLevel(tag)
+    return tag.readBatteryLevelPromise()
     .then((level) => console.log('BatteryLevel: ' + level));
   }).then(() => {
-    return SensorTagPromise.readManufactureName(tag)
+    return tag.readManufactureNamePromise()
     .then((name) => console.log('ManufactureName: ' + name));
   })
-  .then(() => SensorTagPromise.enableIrTemperature(tag))
-  .then(() => SensorTagPromise.enableHumidity(tag))
-  .then(() => SensorTagPromise.enableBarometricPressure(tag))
-  .then(() => SensorTagPromise.enableLuxometer(tag))
+  .then(() => tag.enableIrTemperaturePromise())
+  .then(() => tag.enableHumidityPromise())
+  .then(() => tag.enableBarometricPressurePromise())
+  .then(() => tag.enableLuxometerPromise())
   .then(() => {
     console.log('start setTimeout');
-    return SensorTagPromise.setTimeout(1000)
+    return SensorTag.setTimeoutPromise(1000)
     .then(() => console.log('stop setTimeout'));
   })
-  .then(() => SensorTagPromise.readIrTemperature(tag))
+  .then(() => tag.readIrTemperaturePromise())
   .then((temp) => console.log('IrTemp: ' + temp.object + "," + temp.ambient)) 
-  .then(() => SensorTagPromise.disableIrTemperature(tag))
-  .then(() => SensorTagPromise.readHumidity(tag))
+  .then(() => tag.disableIrTemperaturePromise())
+  .then(() => tag.readHumidityPromise())
   .then((humid) => console.log('Humid: ' + humid.temperature + ', ' + humid.humidity))
-  .then(() => SensorTagPromise.disableHumidity(tag))
-  .then(() => SensorTagPromise.readBarometricPressure(tag))
+  .then(() => tag.disableHumidityPromise())
+  .then(() => tag.readBarometricPressurePromise())
   .then((press) => console.log('Pressure: ' + press))
-  .then(() => SensorTagPromise.disableBarometricPressure(tag))
-  .then(() => SensorTagPromise.readLuxometer(tag))
+  .then(() => tag.disableBarometricPressurePromise())
+  .then(() => tag.readLuxometerPromise())
   .then((lux) => console.log('Luxometer: ' + lux))
   .then(() => {
-    tag.notifySimpleKey();
-    console.log('start simpleKeyChange');
-    return SensorTagPromise.onSimpleKeyChange(tag)
-    .then((keys) => {
-      console.log('stop simpleKeyChange');
-      console.log('start disconnect');
-      return SensorTagPromise.disconnect(tag)
-      .then(() => console.log('stop disconnect'));
-    });
+    return tag.notifySimpleKeyPromise()
+    .then(() => console.log('start simpleKeyChange'));
+  })
+  .then(() => tag.onSimpleKeyChangePromise())
+  .then((keys) => {
+    console.log('start disconnect');
+    return tag.disconnectPromise()
+    .then(() => console.log('stop disconnect'));
   });
 });

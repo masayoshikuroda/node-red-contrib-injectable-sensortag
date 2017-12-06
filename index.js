@@ -1,4 +1,4 @@
-var SensorTagPromise = require('./sensortagpromise');
+var SensorTag = require('./sensortagpromise');
 var ctx = { state: 0, nodes: {}, data: {} };
 
 function addNode(node) {
@@ -69,18 +69,18 @@ function isStatusReady() {
 function startDiscovery() {
   console.log('enter: startDiscovery');
   setState(1);
-  SensorTagPromise.discoverPromise()
+  SensorTag.discoverPromise()
   .then(function(tag) {
     console.log('discovered');
     ctx.tag = tag;
     setState(2);
-    tag.disconnect(onDisconnect);
-    return tag.connectAndSetupPromise();
-  }).then(function() {
-    return SensorTagPromise.notifySimpleKey(ctx.tag);
-  }).then(function() {
-    ctx.tag.on('simpleKeyChange', simpleKeyChanged);
-    setState(3);
+    tag.on('disconnect', disconnected);
+    return tag.connectAndSetupPromise()
+      .then(() => tag.notifySimpleKey(ctx.tag))
+      .then(() => {
+        tag.on('simpleKeyChange', simpleKeyChanged);
+        setState(3);
+      });
   }).catch(function(error) {
     console.log(error);
   });
@@ -92,7 +92,7 @@ function simpleKeyChanged(left, right, reedRelay) {
   if(left) {
    ctx.tag.disconnect(function() {
       console.log('stopped manually');
-    } 
+    }) 
   }
 
   if(right && isStatusReady()) {
@@ -112,36 +112,36 @@ function getDeviceInformation(config) {
   var data = { };
   setState(4);
 
-
-  return Promise.resolve(ctx.tag)
+  tag = ctx.tag
+  return Promise.resolve()
   .then(function() {
     if (config.devname) {
-      return SensortagPromise.readDeviceName(ctx.tag)
+      return tag.readDeviceNamePromise()
       .then(function(name) { data.DeviceName = name; });
     }
   }).then(function() {
     if (config.systemid) {
-      return SensorTagPromise.readSystemId(ctx.tag)
+      return tag.readSystemIdPromise()
       .then(function(id) { data.SystemId = id; });
     }
   }).then(function() {
     if (config.serial) {
-      return SensorTagPromise.readSerialNumber(ctx.tag)
+      return tag.readSerialNumberPromise()
       .then(function(number) { data.SerialNumber = number; });
     }
   }).then(function() {
     if (config.firmrev) {
-      return SensorTagPromise.readFirmwareRevision(ctx.tag)
+      return SensorTagPromise.readFirmwareRevisionPromise()
       .then(function(revision) { data.FirmwareRevison = revision; });
     }
   }).then(function() {
     if(config.hardrev) {
-      return SensorTagPromise.readHardwareRevision(ctx.tag)
+      return tag.readHardwareRevisionPromise()
       .then(function(revision) { data.HardwareRevison = revision; });
     }
   }).then(function() {
     if (config.softrev) {
-      return SensorTagPromise.readSoftwareRevision(ctx.tag)
+      return tag.readSoftwareRevisionPromise()
       .then(function(revision) { data.SoftwareRevison = revision; });
     }
   }).then(function() {
@@ -151,63 +151,63 @@ function getDeviceInformation(config) {
     }
   }).then(function() {
     if (config.battery) {
-      return SensorTagPromise.readBatteryLevel(ctx.tag)
+      return tag.readBatteryLevelPromise()
       .then(function(level) { data.BatteryLevel = level; });
     }
   }).then(function() {
     if (config.temperature) {
-      return SensorTagPromise.enableIrTemperature(ctx.tag);
+      return tag.enableIrTemperaturePromise();
     }
   }).then(function() {
     if (config.humidity) {
-      return SensorTagPromise.enableHumidity(ctx.tag);
+      return tag.enableHumidityPromise();
     }
   }).then(function() {
     if (config.pressure) {
-      return SensorTagPromise.enableBarometricPressure(ctx.tag);
+      return tag.enableBarometricPressurePromise();
     }
   }).then(function(tag) {
     if (config.luxometer) {
-      return SensorTagPromise.enableLuxometer(ctx.tag);
+      return tag.enableLuxometerPromise();
     }
   }).then(function(tag) {
-    return SensorTagPromise.setTimeout(config.delay);
+    return tag.setTimeoutPromise(config.delay);
   }).then(function() {
     if (config.temperature) {
-      return SensorTagPromise.readIrTemperature(ctx.tag)
+      return tag.readIrTemperaturePromise()
       .then(function(temp) {
           data.ObjectTemperature = temp.object;
           data.AmbientTemperature = temp.ambient;
       }).then(function() {
-        return SensorTagPromise.disableIrTemperature(ctx.tag);
+        return tag.disableIrTemperaturePromise();
       });
     }
   }).then(function(tag) {
     if (config.humidity) {
-      return SensorTagPromise.readHumidity(ctx.tag)
+      return tag.readHumidityPromise()
       .then(function(humid) {
           data.Temperature = humid.temperature;
           data.Humidity = humid.humidity;
       }).then(function() {
-        return SensorTagPromise.disableHumidity(ctx.tag);
+        return tag.disableHumidityPromise();
       });
     }
   }).then(function(tag) {
     if (config.pressure) {
-      return SensorTagPromise.readBarometricPressure(ctx.tag)
+      return tag.readBarometricPressurePromise()
       .then(function(pressure) {
           data.BarometricPressure = pressure;
       }).then(function() {
-        return SensorTagPromise.disableBarometricPressure(ctx.tag);
+        return tag.disableBarometricPressurePromise();
       });
     }
   }).then(function(tag) {
     if (config.luxometer) {
-      return SensorTagPromise.readLuxometer(ctx.tag)
+      return tag.readLuxometerPromise()
       .then(function(lux) {
           data.Lux = lux;
       }).then(function() {
-        return SensorTagPromise.disableLuxometer(ctx.tag);
+        return tag.disableLuxometerPromise();
       });
     }
   }).then(function() {

@@ -1,6 +1,6 @@
 var SensorTag = require('sensortag');
 
-exports.setTimeout = function(delay) {
+exports.setTimeoutPromise = function(delay) {
   console.log('enter setTimeout(' + delay + ')');
   return new Promise(function(resolve, reject) {
     setTimeout(function() {
@@ -22,271 +22,281 @@ exports.discoverPromise = function() {
   });
 }
 
-function addPromiseFuncitons(tag) {
-  tag.connectAndSetupPromise = function(tag) {
+exports.discoverByIdPromise = function(id) {
+ console.log('enter discoverbyIdPromise(' + id + ')');
+  return new Promise(function(resolve, reject) {
+    SensorTag.discoverById(id, function(tag) {
+      addPromiseFunctions(tag);
+      console.log('leave discoverByIdPromise(' + id + ')');
+      resolve(tag);
+    });
+  });
+}
+
+exports.discoverByAddressPromise = function(address) {
+ console.log('enter discoverByAddressPromise(' + address + ')');
+  return new Promise(function(resolve, reject) {
+    SensorTag.discoverByAddress(address, function(tag) {
+      addPromiseFunctions(tag);
+      console.log('leave discoverByAddressPromise(' + address + ')');
+      resolve(tag);
+    });
+  });
+}
+
+function addPromiseFunctions(tag) {
+  console.log('enter addPromiseFunctions()');
+
+  tag.disconnectPromise = function() {
+    console.log('enter disconnectPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.disconnect(function() {
+        console.log('leave disconnectPromise()');
+        resolve();
+      });
+    });
+  }
+
+  tag.connectAndSetupPromise = function() {
     console.log('enter connectAndSetupPromise()');
     return new Promise(function(resolve, reject) {
-      console.log('leave connectAndSetupPromise()');
+      tag.connectAndSetup(function(error) {
+	if (error) throw error;
+	console.log('leave connectAndSetupPromise()');
+        resolve();
+      });
+    });
+  }
+
+  tag.readDeviceNamePromise = function() {
+    console.log('enter getDeviceNamePromise()');
+    return new Promise(function(resolve, reject) {
+      console.log('leave getDevicenamePromise()');
+      tag.readDeviceName(function(error, name) {
+        if (error) throw error;
+        console.log('leave readDeviceNamePromise()=' + name);
+        resolve(name);
+      });
+    });
+  }
+
+  tag.readSystemIdPromise = function() {
+    console.log('enter readSystemIdPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.readSystemId(function(error, id) {
+        if (error) throw error;
+        console.log('leave readSystemIdPromise()=' + id);
+        resolve(id);
+      });
+    });
+  }
+
+  tag.readSerialNumberPromise = function() {
+    console.log('enter readSerialNumberPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.readSerialNumber(function(error, number) {
+        if (error) throw error;
+        console.log('leave readSerialNumber()=' + number);
+        resolve(number);
+      });
+    });
+  }
+
+  tag.readFirmwareRevisionPromise = function() {
+    console.log('enter readFirmwareRevisionPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.readFirmwareRevision(function(error, revision) {
+        if (error) throw error;
+        console.log('leave readFirmwareRevisionPromise()=' + revision);
+        resolve(revision);
+      });
+    });
+  }
+
+  tag.readHardwareRevisionPromise = function() {
+    console.log('enter readHardwareRevisionRpomise()');
+    return new Promise(function(resolve, reject){
+      tag.readHardwareRevision(function(error, revision) {
+        if (error) throw error;
+        console.log('leave readHardwareRevisionPromise()=' + revision);
+        resolve(revision);
+      });
+    });
+  }
+
+  tag.readSoftwareRevisionPromise = function() {
+    console.log('enter readSoftwareRevisionPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.readSoftwareRevision(function(error, revision) {
+        if (error) throw error;
+        console.log('leave readSoftwareRevisionPromise()=' + revision);
+        resolve(revision);
+      });
+    });
+  }
+
+  tag.readBatteryLevelPromise = function() {
+    console.log('enter readBatteryLevelPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.readBatteryLevel(function(error, level) {
+        if (error) throw error;
+        console.log('leave readBatteryLevelPromise()=' + level);
+        resolve(level);
+      });
+    });
+  }
+
+  tag.readManufactureNamePromise = function() {
+    console.log('enter readManufactureName()');
+    return new Promise(function(resolve, reject) {
+      tag.readManufacturerName(function(error, name) {
+        if (error) throw error;
+        console.log('leave readManufactureNamePromise()=' + name);
+        resolve(name);
+      });
+    });
+  }
+
+  tag.enableIrTemperaturePromise = function() {
+  console.log('enter enableIrTemperaturePromise()');
+    return new Promise(function(resolve, reject) {
+      tag.enableIrTemperature(function() {
+        console.log('leave enableIrTemperaturePromise()');
+        resolve();
+      });
+    });
+  }
+
+  tag.disableIrTemperaturePromise = function() {
+    console.log('enter disableIrTemperaturePromise()');
+    return new Promise(function(resolve, reject) {
+      tag.disableIrTemperature(function() {
+        console.log('leave disableIrTemperaturePromise()');
+        resolve();
+      });
+    });
+  }
+
+  tag.readIrTemperaturePromise = function() {
+    console.log('enter readIrTemperaturePromise()')
+    return new Promise(function(resolve, reject) {
+      tag.readIrTemperature(function(error, objectTemperature, ambientTemperature) {
+        if (error) throw error;
+        console.log('leave readIrTemperaturePromise()=' + objectTemperature + ', ' + ambientTemperature);
+        resolve({ 'object': objectTemperature, 'ambient': ambientTemperature });
+      });
+    });
+  }
+
+  tag.enableHumidityPromise = function() {
+    console.log('enter enableHumidityPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.enableHumidity(function() {
+        console.log('leave enableHumidityPromise()');
+        resolve();
+      });
+    });
+  }
+
+  tag.disableHumidityPromise = function() {
+    console.log('enter disableHumidityPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.disableHumidity(function() {
+        console.log('leave disableHumidityPromise()');
+        resolve();
+      });
+    });
+  }
+
+  tag.readHumidityPromise = function() {
+    console.log('enter readHumidityPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.readHumidity(function(error, temperature, humidity) {
+        if (error) throw error;
+        console.log('leave readHumidityiPromise()=' + temperature + ', ' + humidity);
+        resolve({ 'temperature': temperature, 'humidity': humidity });
+      });
+    });
+  }
+
+  tag.enableBarometricPressurePromise = function() {
+    console.log('enter enableBarometicPressureProimse()');
+    return new Promise(function(resolve, reject) {
+      tag.enableBarometricPressure(function() {
+        console.log('leave enableBarometricPressurePromise()');
+        resolve();
+      });
+    });
+  }
+
+  tag.disableBarometricPressurePromise = function() {
+    console.log('enter disableBarimetricPressure()');
+    return new Promise(function(resolve, reject) {
+      tag.disableBarometricPressure(function() {
+        console.log('leave disableBarometricPressurePromise()');
+        resolve();
+      });
+    });
+  }
+
+  tag.readBarometricPressurePromise = function() {
+    console.log('enter readBarometricPressurePromise()');
+    return new Promise(function(resolve, result) {
+      tag.readBarometricPressure(function(error, pressure) {
+        if (error) throw error;
+        console.log('leave readBarometricPressurePromise()=' + pressure);
+        resolve(pressure);
+      });
+    });
+  }
+
+  tag.enableLuxometerPromise = function() {
+    console.log('enter enableLuxometerPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.enableLuxometer(function() {
+        console.log('leave enableLuxometerPromise()');
+        resolve();
+      });
+    });
+  }
+
+  tag.disableLuxometerPromise = function() {
+    console.log('enter disableLuxometerPromise()');
+    return new Promise(function(resolve, reject) {
+      tag.disableLuxometer(function() {
+        console.log('leave disableLuxometerPromise()');
+        resolve();
+      });
+    });
+  }
+
+  tag.readLuxometerPromise = function() {
+  console.log('enter readLuxometePromiser()');
+    return new Promise(function(resolve, reject) {
+      tag.readLuxometer(function(error, lux) {
+        if (error) throw error;
+        console.log('leave readLuxometerPromise()=' + lux);
+        resolve(lux);
+      });
+    });
+  }
+
+  tag.notifySimpleKeyPromise = function() {
+    return new Promise(function(resolve, reject) {
+      tag.notifySimpleKey();
       resolve();
     });
   }
-}
 
-exports.connectAndSetup = function(tag) {
-  console.log('enter connectAndSetup()');
-  return new Promise(function(resolve, reject) {
-    tag.connectAndSetup(function() {
-      console.log('leave connectAndSetup()');
-      resolve();
+  tag.onSimpleKeyChangePromise = function() {
+    console.log('enter onSimpleKeyChangePromise()');
+    return new Promise(function(resolve, reject) {
+      tag.on('simpleKeyChange', function(left, right, reedRelay) {
+        console.log('leave onSimpleKeychangePromise()=' + left + ', ' + right  + ', ' + reedRelay);
+        resolve({ 'left': left, 'right':right, 'reedRelay':reedRelay });
+      });
     });
-  });
-}
+  }
 
-exports.disconnect = function(tag) {
-  console.log('enter disconnect()');
-  return new Promise(function(resolve, reject) {
-    tag.disconnect(function() {
-      console.log('leave disconnect()');
-      resolve();
-    });
-  });
-}
-
-exports.onDisconnect = function(tag) {
-  console.log('enter onDisconnect()');
-  return new Promise(function(resolve, reject) {
-    tag.on('disconnect', function() {
-      console.log('leave onDisconnect()');
-      resolve();
-    });
-  });
-}
-
-exports.readDeviceName = function(tag) {
-  console.log('enter getDeviceName()');
-  return new Promise(function(resolve, reject) {
-    tag.readDeviceName(function(error, name) {
-      if (error) throw error;
-      console.log('leave readDeviceName()=' + name);
-      resolve(name);
-    });
-  });
-}
-
-exports.readSystemId = function(tag) {
-  console.log('readSystemId()');
-  return new Promise(function(resolve, reject) {
-    tag.readSystemId(function(error, id) {
-      if (error) throw error;
-      console.log('readSystemId()=' + id);
-      resolve(id);
-    });
-  });
-}
-
-exports.readSerialNumber = function(tag) {
-  console.log('enter readSerialNumber()');
-  return new Promise(function(resolve, reject) {
-    tag.readSerialNumber(function(error, number) {
-      if (error) throw error;
-      console.log('leave readSerialNumber()=' + number);
-      resolve(number);
-    });
-  });
-}
-
-exports.readFirmwareRevision = function(tag) {
-  console.log('enter readFirmwareRevision()');
-  return new Promise(function(resolve, reject) {
-    tag.readFirmwareRevision(function(error, revision) {
-      if (error) throw error;
-      console.log('leave readFirmwareRevision()=' + revision);
-      resolve(revision);
-    });
-  });
-}
-
-exports.readHardwareRevision = function(tag) {
-  console.log('enter readHardwareRevisionRpomise()');
-  return new Promise(function(resolve, reject){
-    tag.readHardwareRevision(function(error, revision) {
-      if (error) throw error;
-      console.log('leave readHardwareRevision()=' + revision);
-      resolve(revision);
-    });
-  });
-}
-
-exports.readSoftwareRevision = function(tag) {
-  console.log('enter readSoftwareRevision()');
-  return new Promise(function(resolve, reject) {
-    tag.readSoftwareRevision(function(error, revision) {
-      if (error) throw error;
-      console.log('leave readSoftwareRevision()=' + revision);
-      resolve(revision);
-    });
-  });
-}
-
-exports.readBatteryLevel = function(tag) {
-  console.log('enter readBatteryLevel()');
-  return new Promise(function(resolve, reject) {
-    tag.readBatteryLevel(function(error, level) {
-      if (error) throw error;
-      console.log('leave readBatteryLevel()=' + level);
-      resolve(level);
-    });
-  });
-}
-
-exports.readManufactureName = function(tag) {
-  console.log('enter readManufactureName()');
-  return new Promise(function(resolve, reject) {
-    tag.readManufacturerName(function(error, name) {
-      if (error) throw error;
-      console.log('leave readManufactureName()=' + name);
-      resolve(name);
-    });
-  });
-}
-
-exports.enableIrTemperature = function(tag) {
-  console.log('enter enableIrTemperature()');
-  return new Promise(function(resolve, reject) {
-    tag.enableIrTemperature(function() {
-      console.log('leave enableIrTemperature()');
-      resolve();
-    });
-  });
-}
-
-exports.disableIrTemperature = function(tag) {
-  console.log('enter disableIrTemperature()');
-  return new Promise(function(resolve, reject) {
-    tag.disableIrTemperature(function() {
-      console.log('leave disableIrTemperature()');
-      resolve();
-    });
-  });
-}
-
-exports.readIrTemperature = function(tag) {
-  console.log('enter readIrTemperature()')
-  return new Promise(function(resolve, reject) {
-    tag.readIrTemperature(function(error, objectTemperature, ambientTemperature) {
-      if (error) throw error;
-      console.log('leave readIrTemperature()=' + objectTemperature + ', ' + ambientTemperature);
-      resolve({ 'object': objectTemperature, 'ambient': ambientTemperature });
-    });
-  });
-}
-
-exports.enableHumidity = function(tag) {
-  console.log('enter enableHumidity()');
-  return new Promise(function(resolve, reject) {
-    tag.enableHumidity(function() {
-      console.log('leave enableHumidity()');
-      resolve();
-    });
-  });
-}
-
-exports.disableHumidity = function(tag) {
-  console.log('enter disableHumidity()');
-  return new Promise(function(resolve, reject) {
-    tag.disableHumidity(function() {
-      console.log('leave disableHumidity()');
-      resolve();
-    });
-  });
-}
-
-exports.readHumidity = function(tag) {
-  console.log('enter readHumidity()');
-  return new Promise(function(resolve, reject) {
-    tag.readHumidity(function(error, temperature, humidity) {
-      if (error) throw error;
-      console.log('leave readHumidity()=' + temperature + ', ' + humidity);
-      resolve({ 'temperature': temperature, 'humidity': humidity });
-    });
-  });
-}
-
-exports.enableBarometricPressure= function(tag) {
-  console.log('enter enableBarometicPressure()');
-  return new Promise(function(resolve, reject) {
-    tag.enableBarometricPressure(function() {
-      console.log('leave enableBarometricPressure()');
-      resolve();
-    });
-  });
-}
-
-exports.disableBarometricPressure = function(tag) {
-  console.log('enter disableBarimetricPressure()');
-  return new Promise(function(resolve, reject) {
-    tag.disableBarometricPressure(function() {
-      console.log('leave disableBarometricPressure()');
-      resolve();
-    });
-  });
-}
-
-exports.readBarometricPressure = function(tag) {
-  console.log('enter readBarometricPressure()');
-  return new Promise(function(resolve, result) {
-    tag.readBarometricPressure(function(error, pressure) {
-      if (error) throw error;
-      console.log('leave readBarometricPressure()=' + pressure);
-      resolve(pressure);
-    });
-  });
-}
-
-exports.enableLuxometer = function(tag) {
-  console.log('enter enableLuxometer()');
-  return new Promise(function(resolve, reject) {
-    tag.enableLuxometer(function() {
-      console.log('leave enableLuxometer()');
-      resolve();
-    });
-  });
-}
-
-exports.disableLuxometer = function(tag) {
-  console.log('enter disableLuxometer()');
-  return new Promise(function(resolve, reject) {
-    tag.disableLuxometer(function() {
-      console.log('leave disableLuxometer()');
-      resolve();
-    });
-  });
-}
-
-exports.readLuxometer = function(tag) {
-  console.log('enter readLuxometer()');
-  return new Promise(function(resolve, reject) {
-    tag.readLuxometer(function(error, lux) {
-      if (error) throw error;
-      console.log('leave readLuxometer()=' + lux);
-      resolve(lux);
-    });
-  });
-}
-
-exports.notifySimpleKey = function(tag) {
-  return new Promise(function(resolve, reject) {
-    tag.notifySimpleKey();
-    resolve();
-  });
-}
-
-exports.onSimpleKeyChange = function(tag) {
-  console.log('enter onSimpleKeyChange()');
-  return new Promise(function(resolve, reject) {
-    tag.on('simpleKeyChange', function(left, right, reedRelay) {
-      console.log('leave onSimpleKeychange()=' + left + ', ' + right  + ', ' + reedRelay);
-      resolve({ 'left': left, 'right':right, 'reedRelay':reedRelay });
-    });
-  });
+  console.log('leave addPromiseFunctions()');
 }

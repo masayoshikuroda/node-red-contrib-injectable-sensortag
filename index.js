@@ -103,13 +103,16 @@ function onSimpleKeyChange(left, right, reedRelay) {
 function stopConnection() {
   console.log('enter: stopConnection');
   setState(5);
-  ctx.tag.disconnect(onDisconnect);
+  ctx.tag.disconnect(function() {
+    console.log('stopped manually')
+  });
 }
 
 function onDisconnect() {
   console.log('enter: onDisconnect');
   setState(0);
   ctx.tag = null;
+  startDiscoverry();
 }
 
 function getDeviceInformation(config) {

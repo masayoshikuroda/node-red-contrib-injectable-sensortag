@@ -171,7 +171,7 @@ function getDeviceInformation(config) {
       return tag.enableLuxometerPromise();
     }
   }).then(function(tag) {
-    return tag.setTimeoutPromise(config.delay);
+    return SensorTag.setTimeoutPromise(config.delay);
   }).then(function() {
     if (config.temperature) {
       return tag.readIrTemperaturePromise()
